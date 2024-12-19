@@ -4,12 +4,12 @@
 ### 2차 과제
 1. API 문서 작성
 
-<img src="img_6.png" width="300" height="400"/>
-<img src="img_1.png" width="300" height="300"/>
-<img src="img_2.png" width="300" height="300"/>
-<img src="img_3.png" width="300" height="300"/>
-<img src="img_4.png" width="300" height="300"/>
-<img src="img_5.png" width="300" height="300"/>
+<img src="images/img_6.png" width="300" height="400"/>
+<img src="images/img_1.png" width="300" height="300"/>
+<img src="images/img_2.png" width="300" height="300"/>
+<img src="images/img_3.png" width="300" height="300"/>
+<img src="images/img_4.png" width="300" height="300"/>
+<img src="images/img_5.png" width="300" height="300"/>
 
 
 
@@ -23,7 +23,7 @@
    ○디비버 커뮤니티 버전 다운로드
 
         - mariaDB 커넥션 진행
-![img.png](img.png)
+![img.png](images/img.png)
 
 
 
