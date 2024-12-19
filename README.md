@@ -4,12 +4,13 @@
 ### 2차 과제
 1. API 문서 작성
 
-![img_6.png](img_6.png)
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
-![img_4.png](img_4.png)
-![img_5.png](img_5.png)
+<img src="img_6.png" width="300" height="400"/>
+<img src="img_1.png" width="300" height="300"/>
+<img src="img_2.png" width="300" height="300"/>
+<img src="img_3.png" width="300" height="300"/>
+<img src="img_4.png" width="300" height="300"/>
+<img src="img_5.png" width="300" height="300"/>
+
 
 
 ### 1차 과제
@@ -23,6 +24,7 @@
 
         - mariaDB 커넥션 진행
 ![img.png](img.png)
+
 
 
 
