@@ -2,7 +2,6 @@
 <!DOCTYPE configuration
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
-
 <configuration>
     <!-- VO를 선언하여 mybatis/sql/하위의 쿼리들을 실행할때 resultType, parameterType에 풀 패키지명을
         쓰지 않고 선언한 alias의 이름만 사용하여 VO를 주고 받을 수 있도록 해줌. **** 예시 **** mybatis/mybatis-config.xml
@@ -13,6 +12,9 @@
         parameterType="om.hee.heechart.VO.TestVO"> SELECT * FROM TableName WHERE
         ColumnName = #{parameter} </select> -->
 
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
     <typeAliases>
         <typeAlias type="com.devfun.vo.MovieVO" alias="movieVO" />
     </typeAliases>
