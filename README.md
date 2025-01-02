@@ -1,7 +1,7 @@
-## 코멘토 springboot, mariaDB로 접속자 수, 로그인 수 통계 API 구축하기
+## springboot, mariaDB로 접속자 수, 로그인 수 통계 API 구축
 
 
-### 1차 과제
+### 1차
 1. spring 개발환경 셋팅
 
    ○ IntelliJ Community 버전 설치 ( 2024.01 )
@@ -13,7 +13,7 @@
         - mariaDB 커넥션 진행
 
 
-### 2차 과제
+### 2차
 
 1. 학습
 
@@ -52,7 +52,7 @@
 
 
 
-2. API 문서 작성
+2. API 문서 작성 (2주차_API초안.docx 에 있음)
 
 <img src="images/img_6.png" width="300" height="400"/>
 <img src="images/img_1.png" width="300" height="300"/>
@@ -62,13 +62,13 @@
 <img src="images/img_5.png" width="300" height="300"/>
 
 
-### 3차 과제
+### 3차
 
 1. 간단한 Restful API 구현
 
    ○  Springboot, Rest Controller를 이용하여 백엔드를 이해
 
-        - 진행하면서 sql쿼리가 실행되지 않아서 "is_success"의 값이 false로 나왔다. 무슨 문제인지 찾아봤더니
+        - 진행하면서 sql쿼리가 실행되지 않아서 응답 변수 중 "is_success"의 값이 false로 나왔다. 무슨 문제인지 찾아봤더니
          sql쿼리가 정의되어 있는 mapper.xml가 main/resources/.. 경로에 있지 않아서 생긴 문제였고 경로를 수정했더니 성공적으로 sql쿼리의 결과가 출력되었다.
          mapper파일을 main/resources/.. 이 아닌 다른 경로로 바꾸고 싶다면 application.properties에 mybatis.mapper-locations= mybatis-mapper/*.xml 이런 식으로 작성하여 변경할 수 있다.
 
