@@ -30,6 +30,23 @@ public class settingTest {
         return service.yearloginNum(year);
     }
 
+    // 1
+    @ResponseBody
+    @RequestMapping("/month")
+    public Map<String, Object> sqltest1(String yearMonth) throws Exception{
+
+        return service.yearMonthNum(yearMonth);
+    }
+
+    //2
+    @ResponseBody
+    @RequestMapping("/day")
+    public Map<String, Object> sqltest2(String yearMonthDay) throws Exception{
+
+        return service.yearMonthDayNum(yearMonthDay);
+    }
+
+
     @RequestMapping("/test")
     public ModelAndView test() throws Exception{
         ModelAndView mav = new ModelAndView("test");

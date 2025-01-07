@@ -11,4 +11,43 @@
         where left(ri.createDate, 2) = #{year};
     </select>
 
+    <!-- 1. 년월별 접속자 수 -->
+    <select id="countYearMonthLogin" parameterType="string" resultType="hashMap">
+        SELECT DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y-%m') AS MONTH,
+        COUNT(DISTINCT userID) AS LOGIN_USERS
+        FROM statistic1.requestInfo r
+        JOIN requestCode rc ON r.requestCode = rc.requestCode
+        WHERE rc.code_explain = 'LOGIN'
+        AND DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y%m') =
+        CONCAT('20', #{yearMonth})  <!-- yearMonth를 20년 형식으로 변환 -->
+        GROUP BY MONTH
+        ORDER BY MONTH;
+    </select>
+
+    <!-- 2. 일별 접속자 수 -->
+    <select id="countYearMonthDayLogin" parameterType="string" resultType="hashMap">
+        SELECT DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y-%m-%d') AS DAY,
+        COUNT(DISTINCT userID) AS LOGIN_USERS
+        FROM statistic1.requestInfo r
+        JOIN requestCode rc ON r.requestCode = rc.requestCode
+        WHERE rc.code_explain = 'LOGIN'
+        AND DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y%m%d') = CONCAT('20', #{yearMonthDay})
+        GROUP BY DAY
+        ORDER BY DAY;
+    </select>
+
+
+    <!-- 3. 평균 하루 로그인 수 -->
+    <select id="averageRecentMonthLogin" parameterType="string" resultType="hashMap">
+        SELECT DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y-%m-%d') AS DAY,
+        COUNT(DISTINCT userID) AS LOGIN_USERS
+        FROM statistic1.requestInfo r
+            JOIN requestCode rc ON r.requestCode = rc.requestCode
+        WHERE rc.code_explain = 'LOGIN'
+          AND DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y%m%d') = CONCAT('20', #{yearMonthDay})
+        GROUP BY DAY
+        ORDER BY DAY;
+    </select>
+
+
 </mapper>

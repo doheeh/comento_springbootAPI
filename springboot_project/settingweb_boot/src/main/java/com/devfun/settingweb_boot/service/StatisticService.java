@@ -4,4 +4,7 @@ import java.util.HashMap;
 public interface StatisticService {
     public HashMap<String,Object> yearloginNum (String year);
 
+    public HashMap<String,Object> yearMonthNum (String year);
+
+    public HashMap<String,Object> yearMonthDayNum (String year);
 }
