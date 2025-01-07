@@ -8,7 +8,7 @@
 		<version>3.4.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>org.devfun</groupId>
+	<groupId>com.devfun</groupId>
 	<artifactId>settingweb_boot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>settingweb_boot</name>
@@ -122,6 +122,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.devfun.settingweb_boot.SettingwebBootApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

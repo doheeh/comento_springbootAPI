@@ -1,4 +1,4 @@
-package org.devfun.settingweb_boot.test;
+package com.devfun.settingweb_boot.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import org.devfun.settingweb_boot.dao.StatisticMapper;
-import org.devfun.settingweb_boot.service.StatisticService;
+import com.devfun.settingweb_boot.dao.StatisticMapper;
+import com.devfun.settingweb_boot.service.StatisticService;
 
 
 

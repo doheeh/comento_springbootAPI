@@ -1,4 +1,4 @@
-package org.devfun.settingweb_boot.config;
+package com.devfun.settingweb_boot.config;
 
 import javax.sql.DataSource;
 
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan(basePackages = "org.devfun.settingweb_boot.dao")
+@MapperScan(basePackages = "com.devfun.settingweb_boot.dao")
 public class MybatisConfig {
 
     @Bean

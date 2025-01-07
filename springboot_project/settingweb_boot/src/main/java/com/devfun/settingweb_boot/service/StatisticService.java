@@ -1,4 +1,4 @@
-package org.devfun.settingweb_boot.service;
+package com.devfun.settingweb_boot.service;
 import java.util.HashMap;
 
 public interface StatisticService {
