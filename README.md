@@ -54,12 +54,6 @@
 
 2. API 문서 작성 (2주차_API초안.docx 에 있음)
 
-<img src="images/img_6.png" width="300" height="400"/>
-<img src="images/img_1.png" width="300" height="300"/>
-<img src="images/img_2.png" width="300" height="300"/>
-<img src="images/img_3.png" width="300" height="300"/>
-<img src="images/img_4.png" width="300" height="300"/>
-<img src="images/img_5.png" width="300" height="300"/>
 
 
 ### 3차
