@@ -38,12 +38,36 @@ public class settingTest {
         return service.yearMonthNum(yearMonth);
     }
 
-    //2
+    // 2
     @ResponseBody
     @RequestMapping("/day")
     public Map<String, Object> sqltest2(String yearMonthDay) throws Exception{
 
         return service.yearMonthDayNum(yearMonthDay);
+    }
+
+    // 3
+    @ResponseBody
+    @RequestMapping("/averageDay")
+    public Map<String, Object> sqltest3(String recentMonth) throws Exception{
+
+        return service.averageDayOfRecentMonth(recentMonth);
+    }
+
+    // 4
+    @ResponseBody
+    @RequestMapping("/loginExcludeHoliday")
+    public Map<String, Object> sqltest4(String yearMonth) throws Exception{
+
+        return service.countExcludeHoliday(yearMonth);
+    }
+
+    // 5
+    @ResponseBody
+    @RequestMapping("/loginMonthDepartment")
+    public Map<String, Object> sqltest5(String yearMonth) throws Exception{
+
+        return service.countLoginByDepartment(yearMonth);
     }
 
 

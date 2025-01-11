@@ -10,4 +10,8 @@ public interface  StatisticMapper {
     List<HashMap<String, Object>> countYearMonthLogin(String year);
 
     List<HashMap<String, Object>> countYearMonthDayLogin(String year);
+
+    List<HashMap<String, Object>> averageRecentMonthLogin(String year);
+
+    List<HashMap<String, Object>> countLoginByDepartment(String year);  //5
 }

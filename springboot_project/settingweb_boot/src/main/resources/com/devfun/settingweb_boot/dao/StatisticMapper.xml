@@ -39,15 +39,33 @@
 
     <!-- 3. 평균 하루 로그인 수 -->
     <select id="averageRecentMonthLogin" parameterType="string" resultType="hashMap">
-        SELECT DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y-%m-%d') AS DAY,
-        COUNT(DISTINCT userID) AS LOGIN_USERS
-        FROM statistic1.requestInfo r
-            JOIN requestCode rc ON r.requestCode = rc.requestCode
-        WHERE rc.code_explain = 'LOGIN'
-          AND DATE_FORMAT(STR_TO_DATE(createDate, '%y%m%d%H%i'), '%Y%m%d') = CONCAT('20', #{yearMonthDay})
-        GROUP BY DAY
-        ORDER BY DAY;
+        SELECT
+            COUNT(*) AS TOTAL_LOGINS
+        FROM
+            requestInfo R
+                JOIN
+            requestCode RC ON R.requestCode = RC.requestCode
+        WHERE
+            RC.code_explain = 'LOGIN'
+          AND STR_TO_DATE(createDATE, '%y%m%d%H%i') >= DATE_SUB(CURDATE(), INTERVAL #{recentMonth} MONTH);
+
     </select>
 
+
+    <!-- 5.  부서별 월별 로그인 수 -->
+    <select id="countLoginByDepartment" parameterType="string" resultType="hashMap">
+        SELECT
+            EXTRACT(YEAR FROM STR_TO_DATE(r.createDate, '%y%m%d%H%i')) AS YEAR,  -- 연도 추출
+        EXTRACT(MONTH FROM STR_TO_DATE(r.createDate, '%y%m%d%H%i')) AS MONTH,  -- 월 추출
+        u.HR_ORGAN AS DEPARTMENT,  -- 부서 정보 (HR_ORGAN 컬럼)
+        COUNT(DISTINCT r.userID) AS LOGIN_USERS  -- 부서별 로그인 수
+        FROM statistic1.requestInfo r
+            JOIN user u ON r.userID = u.userID  -- 사용자 테이블과 조인
+            JOIN requestCode rc ON r.requestCode = rc.requestCode  -- 요청 코드와 연결
+        WHERE rc.code_explain = 'LOGIN'  -- 로그인 요청만 필터링
+          AND DATE_FORMAT(STR_TO_DATE(r.createDate, '%y%m%d%H%i'), '%Y%m') = CONCAT('20', #{yearMonth})  -- yearMonth를 20년 형식으로 변환하여 필터링
+        GROUP BY YEAR, MONTH, u.HR_ORGAN  -- 연도, 월, 부서별로 그룹화
+        ORDER BY YEAR, MONTH, u.HR_ORGAN;  -- 연도, 월, 부서별로 정렬
+    </select>
 
 </mapper>
