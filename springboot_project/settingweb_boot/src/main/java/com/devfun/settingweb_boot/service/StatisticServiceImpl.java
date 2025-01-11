@@ -1,11 +1,12 @@
 package com.devfun.settingweb_boot.service;
 
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -193,6 +194,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public HashMap<String, Object> countExcludeHoliday (String yearMonth) {
         HashMap<String, Object> retVal = new HashMap<String,Object>();
+        int holidayLoginCount = 0; // 휴일 로그인 수를 누적할 변수
 
         try {
             // 여러 결과를 리스트로 받음
@@ -205,7 +207,6 @@ public class StatisticServiceImpl implements StatisticService {
 
             // 로그인 수 저장 변수
             Integer loginUsers = 0;
-            System.out.println(retVal); //
 
             // 첫 번째 결과에서 LOGIN_USERS 값 추출
             if (retVal.containsKey("LOGIN_USERS")) {
@@ -213,27 +214,42 @@ public class StatisticServiceImpl implements StatisticService {
                 loginUsers = ((Long) retVal.get("LOGIN_USERS")).intValue();
             }
 
-            //---------------
-            // 공휴일 API 호출
-            List<String> holidayList = getHolidays(yearMonth);
-            // 데이터베이스 쿼리에 전달할 파라미터 생성
-            HashMap<String, Object> queryParams = new HashMap<>();
-            queryParams.put("yearMonth", yearMonth);
-            queryParams.put("holidays", holidayList);
+            // 공휴일 API 호출 (휴일 로그인 개수)
+            List<String> holidayList = getHolidaysWithSundays(yearMonth);
 
-            // 데이터베이스 쿼리 실행
-            //List<HashMap<String, Object>> resultList = uMapper.countLoginExcludeHoliday(queryParams);
-//----------
+            try {
+                for (String holiday : holidayList) {
+                    // holiday는 "20200815" 형식으로 되어 있다고 가정
+                    String yearMonthDay = holiday.substring(2, 8);
 
+                    // 해당 날짜에 대한 로그인 수를 가져옵니다.
+                    List<HashMap<String, Object>> result = uMapper.countYearMonthDayLogin(yearMonthDay);
 
-            // 리스트에서 첫 번째 결과만 처리 (원하는 방식에 맞게 수정 가능)
-            if (!resultList.isEmpty()) {
-                retVal = resultList.get(0); // 예시로 첫 번째 결과를 retVal에 저장
+                    // 결과가 존재하고 리스트에 데이터가 있을 경우
+                    if (result != null && !result.isEmpty()) {
+                        HashMap<String, Object> data = result.get(0); // 첫 번째 결과
+                        if (data.containsKey("LOGIN_USERS")) {
+                            // "LOGIN_USERS"가 존재하는지 확인 후, 그 값을 누적
+                            Object loginUsersObj = data.get("LOGIN_USERS");
+                            int holidayLoginUsers = 0;
+
+                            // LOGIN_USERS가 Long일 수 있으므로 안전하게 int로 변환
+                            if (loginUsersObj instanceof Long) {
+                                holidayLoginUsers = ((Long) loginUsersObj).intValue();
+                            } else if (loginUsersObj instanceof Integer) {
+                                holidayLoginUsers = (Integer) loginUsersObj;
+                            }
+
+                            holidayLoginCount += holidayLoginUsers; // 로그인 수를 누적
+                        }
+                    }
+                }
+            }catch (Exception e) {
+                System.out.println("Error getting total login count: " + e.getMessage());
             }
-            if (retVal == null) {
-                retVal = new HashMap<>();
-            }
 
+            retVal = new HashMap<String, Object>();
+            retVal.put("countLoginExcludeHoliday",loginUsers - holidayLoginCount);
             retVal.put("is_success", true);
 
         }catch(Exception e) {
@@ -259,7 +275,6 @@ public class StatisticServiceImpl implements StatisticService {
             String month = yearMonth.substring(2, 4);   //08
 
             year = "20"+year;
-            System.out.println(year);
 
             // 공휴일 API 호출
             String response = holidayApiService.fetchHolidays(year, month);
@@ -276,11 +291,52 @@ public class StatisticServiceImpl implements StatisticService {
         }
     }
 
+    public List<String> getHolidaysWithSundays(String yearMonth) {
+        Set<String> holidaySet = new HashSet<>(getHolidays(yearMonth));  // 휴일 목록을 Set으로 만들어 중복 제거
+        // 연도와 월 추출
+        String year = yearMonth.substring(0, 2);    //2020
+        String month = yearMonth.substring(2, 4);   //08
+        year = "20"+year;
+
+        // 해당 월의 첫째 날과 마지막 날 계산
+        LocalDate startDate = LocalDate.parse(year + "-" + month + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        // 월별 일요일을 구해서 Set에 추가
+        LocalDate date = startDate;
+        while (!date.isAfter(endDate)) {
+            if (date.getDayOfWeek().getValue() == 7) {  // 일요일(7)
+                holidaySet.add(date.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+            }
+            date = date.plusDays(1);  // 하루씩 더하기
+        }
+
+        // Set을 다시 List로 변환하여 반환
+        return new ArrayList<>(holidaySet);
+    }
+
     // API 응답을 파싱하여 공휴일 리스트로 변환
     private List<String> parseHolidayResponse(String response) {
-        // TODO: XML 또는 JSON 파싱 로직 작성
-        // 예시: ["2025-01-01", "2025-01-15"]
-        return new ArrayList<>();
+        List<String> holidays = new ArrayList<>();
+        try {
+            // JSON 파싱을 위한 ObjectMapper 객체 생성
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // JSON 문자열을 JsonNode로 파싱
+            JsonNode rootNode = objectMapper.readTree(response);
+
+            // "body" -> "items" -> "item" 배열로 접근
+            JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
+
+            // item 배열에서 "locdate" 값을 추출하여 리스트에 추가
+            for (JsonNode itemNode : itemsNode) {
+                String locdate = itemNode.path("locdate").asText();
+                holidays.add(locdate);
+            }
+        } catch (Exception e) {
+            System.out.println("Error parsing holiday response: " + e.getMessage());
+        }
+        return holidays;
     }
 
 

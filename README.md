@@ -78,7 +78,7 @@
 
 ### 4차
 
-1. SW 활용 현황 통계 API 구축을 위한 SQL 작성  
+1. SW 활용 현황 통계 API 구축을 위한 SQL 수정
 
    ○  1) 월별 접속자 수
 
@@ -131,9 +131,12 @@
             ORDER BY YEAR, MONTH, u.HR_ORGAN;  -- 연도, 월, 부서별로 정렬
 
 
-2. API와 SQL(5가지)를 중심으로 API를 개발
+2. API와 SQL(5가지)를 중심으로 API 개발  
+
 
 3. API가이드 문서 보완
-- 4주차_API명세서.docx  파일에 존재
+- 4주차_API명세서.docx  파일
 
+4. 휴일을 제외한 로그인 수는 공공데이터포털의 한국천문연구원_특일 정보 API의 휴일정보를 활용하였음.
+   https://www.data.go.kr/data/15012690/openapi.do
 
